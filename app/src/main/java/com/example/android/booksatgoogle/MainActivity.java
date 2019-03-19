@@ -9,8 +9,11 @@ import android.widget.EditText;
 import android.content.Loader;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.widget.ListView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<BookConstructor>>{
 
     public static String LOG_TAG = MainActivity.class.getSimpleName();
     public static String sample =
@@ -25,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(LOG_TAG,"Started Main Activity");
         usertext();
+        Log.e(LOG_TAG, "Set a click listener on button");
+        LoaderManager loaderManager = getLoaderManager();
+        Log.e(LOG_TAG,"Getting loader instance");
+        loaderManager.initLoader(1,null,this);
+        Log.e(LOG_TAG,"Calling on the first loaderOverwirte");
     }
 
     private void usertext() {
@@ -36,8 +44,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String searchWorkd = userUISearch.getText().toString();
+                searchWorkd = sample;
             }
         });
+
+    }
+
+    @Override
+    public Loader<List<BookConstructor>> onCreateLoader(int id, Bundle args) {
+        Log.e(LOG_TAG,"Loader manger started calling on BookLoader");
+
+        return new BookLoader(this);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<BookConstructor>> loader, List<BookConstructor> data) {
+        ListView listView = (ListView) findViewById(R.id.list);
+        BookAdapter bookAdapter = new BookAdapter(this,data);
+        listView.setAdapter(bookAdapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<BookConstructor>> loader) {
 
     }
 }

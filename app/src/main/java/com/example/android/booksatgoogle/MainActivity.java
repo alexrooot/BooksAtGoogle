@@ -17,8 +17,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<BookConstructor>>{
 
     public static String LOG_TAG = MainActivity.class.getSimpleName();
-    public static String sample =
-            "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
+    public static String searchWorkd ="";
+           // "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
 
 
 
@@ -37,14 +37,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
 
 
-        LoaderManager loaderManager = getLoaderManager();
-        Log.e(LOG_TAG,"Getting loader instance");
-        loaderManager.initLoader(1,null,this);
-        Log.e(LOG_TAG,"Calling on the first loaderOverwirte");
+        
     }
 
     private void usertext() {
-        EditText userUIText = (EditText) findViewById(R.id.search_bar);
+        final EditText userUIText = (EditText) findViewById(R.id.search_bar);
         final Button userUISearch = (Button) findViewById(R.id.button);
 
 
@@ -53,21 +50,33 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             public void onClick(View v) {
                 ProgressBar visibleProgress = (ProgressBar) findViewById(R.id.loading_spinner);
                 visibleProgress.setVisibility(View.VISIBLE);
-                String searchWorkd = userUISearch.getText().toString();
-                searchWorkd = sample;
-                EditText userText = (EditText) findViewById(R.id.search_bar) ;
-                searchWorkd = userText.getText().toString();
+                searchWorkd = userUIText.getText().toString();
+                searchWorkd = "https://www.googleapis.com/books/v1/volumes?q="+searchWorkd+
+                        "&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
+
                 Log.e(LOG_TAG, "we grab the search word :" + searchWorkd);
+                userUIText.setText(null);
+                startLoaderManager();
+
             }
         });
 
     }
 
+    private void startLoaderManager() {
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(1, null, this);
+    }
+
+
     @Override
     public Loader<List<BookConstructor>> onCreateLoader(int id, Bundle args) {
         Log.e(LOG_TAG,"Loader manger started calling on BookLoader");
+        String sample =
+                "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
 
-        return new BookLoader(this);
+
+        return new BookLoader(this, sample);
     }
 
     @Override

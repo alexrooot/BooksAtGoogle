@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         Log.e(LOG_TAG,"Started Main Activity");
         usertext();
         Log.e(LOG_TAG, "Set a click listener on button");
+
+
+        ProgressBar mainProgress = (ProgressBar) findViewById(R.id.loading_spinner);
+        mainProgress.setVisibility(View.INVISIBLE);
+
+
+
         LoaderManager loaderManager = getLoaderManager();
         Log.e(LOG_TAG,"Getting loader instance");
         loaderManager.initLoader(1,null,this);
@@ -43,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         userUISearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProgressBar visibleProgress = (ProgressBar) findViewById(R.id.loading_spinner);
+                visibleProgress.setVisibility(View.VISIBLE);
                 String searchWorkd = userUISearch.getText().toString();
                 searchWorkd = sample;
+                EditText userText = (EditText) findViewById(R.id.search_bar) ;
+                searchWorkd = userText.getText().toString();
+                Log.e(LOG_TAG, "we grab the search word :" + searchWorkd);
             }
         });
 
@@ -61,7 +74,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public void onLoadFinished(Loader<List<BookConstructor>> loader, List<BookConstructor> data) {
         ListView listView = (ListView) findViewById(R.id.list);
         BookAdapter bookAdapter = new BookAdapter(this,data);
+        Log.e(LOG_TAG, "generated an adapter instance with data list");
         listView.setAdapter(bookAdapter);
+        Log.e(LOG_TAG,"Started the adapter to show onto list view");
+        ProgressBar doneProgress = (ProgressBar) findViewById(R.id.loading_spinner);
+        doneProgress.setVisibility(View.INVISIBLE);
     }
 
     @Override

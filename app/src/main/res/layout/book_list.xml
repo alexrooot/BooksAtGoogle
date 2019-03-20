@@ -27,12 +27,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_alignParentRight="true"
+        android:gravity="center"
         android:background="@android:color/darker_gray"
+        tools:text="⇩"
         />
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="18dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/title"
         android:backgroundTint="@android:color/darker_gray"

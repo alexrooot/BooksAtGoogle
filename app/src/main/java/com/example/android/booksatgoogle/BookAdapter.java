@@ -25,21 +25,26 @@ public class BookAdapter extends ArrayAdapter<BookConstructor> {
         Log.e(LOG_TAG,"inflating recycler");
         View listItemView = convertView;
         if (listItemView == null){
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.book_list,parent,false);
+            listItemView = LayoutInflater.from(getContext()).inflate(
+                    R.layout.book_list,parent,false);
         }
         BookConstructor currentBook = getItem(position);
-        Log.e(LOG_TAG,"We just got book object"+position);
-        TextView titleview = (TextView) listItemView.findViewById(R.id.title);
-        TextView authorview =(TextView) listItemView.findViewById(R.id.author);
-        TextView priceview = (TextView) listItemView.findViewById(R.id.price);
-        TextView downview = (TextView) listItemView.findViewById(R.id.down);
-        titleview.setText(currentBook.getmBookTitel);
-        authorview.setText(currentBook.getmBookAuthor);
-        priceview.setText(currentBook.getmBookPrice);
+        Log.e(LOG_TAG,position+": We just got book object");
+        TextView titleview = listItemView.findViewById(R.id.title);
+        TextView authorview = listItemView.findViewById(R.id.author);
+        TextView priceview = listItemView.findViewById(R.id.price);
+        TextView downview = listItemView.findViewById(R.id.down);
+
+
+        titleview.setText(currentBook.getmBookTitel());
+        authorview.setText(currentBook.getmBookAuthor());
+        priceview.setText(currentBook.getmBookPrice());
         Log.e(LOG_TAG,"Position: "+position+" set list view with string data");
-        if (currentBook.getmBookURL != null){
+        if (currentBook.getmBookURL() != null){
             downview.setTypeface(null, Typeface.BOLD);//make the text bold from java
-            downview.setText("↓");
+            downview.setText("⇩");
+        }else{
+            downview.setVisibility(View.GONE);
         }
         return listItemView;
     }

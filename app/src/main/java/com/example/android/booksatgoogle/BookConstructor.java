@@ -20,9 +20,13 @@ public class BookConstructor {
         mBookURL = url;
         mBoolSerial = serial;
     }
-    public String getmBookTitel;
-    public String getmBookAuthor;
-    public String getmBookPrice;
-    public String getmBookURL;
-    public String getmBoolSerial;
+    public String getmBookTitel(){return mBookTitel;}
+
+    public String getmBookAuthor(){return mBookAuthor;}
+
+    public String getmBookPrice(){return mBookPrice;}
+
+    public String getmBookURL(){return mBookURL;}
+
+    public String getmBoolSerial(){return mBoolSerial;}
 }

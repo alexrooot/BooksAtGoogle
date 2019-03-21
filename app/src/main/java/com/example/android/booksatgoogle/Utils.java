@@ -56,32 +56,43 @@ public class Utils {
         try {
             Log.e(LOG_TAG, "Try to prase with try");
             jsonResults = new JSONObject(jsonSocket);//save the string/BufferedReader into this type
+            Log.e(LOG_TAG, "save the string data into JSON=jsonResult");
             JSONArray booksArray = jsonResults.getJSONArray("items");//indicate where to start search
-
+            Log.e(LOG_TAG, "created an array specific for JSON");
             //loop to all things under items JSON
-            for (int i = 0; i < booksArray.length(); i++) {
+            for (int i = 0; i < booksArray.length(); i++) { Log.e(LOG_TAG,"start loop currently on"+i);
                 JSONObject currentBook = booksArray.getJSONObject(i);// make a temp JSONArray of our data;
+                Log.e(LOG_TAG, "local json");
+
                         JSONObject saleInfo = booksArray.getJSONObject(i);//selling properties
+                        Log.e(LOG_TAG, "Saleinfo worked");
+
                         JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");//
-                                JSONObject industryIdentifiers = volumeInfo.getJSONObject("industryIdentifiers");
+                        Log.e(LOG_TAG,"Volumeinfo");
+
+                JSONArray identifier = volumeInfo.getJSONArray("industryIdentifiers");
+
+                JSONObject currentID = identifier.getJSONObject(i);
+                                //JSONObject industryIdentifiers = currentBook.getJSONObject("industryIdentifiers");
+                                Log.e(LOG_TAG,"indentifer");
 
 
 
                 String author = "";
-                try {
-                     author = volumeInfo.getString("authors");
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG,"Could not get author for book"+volumeInfo.getString("title") );
-                }
-
                 String donw = volumeInfo.getString("previewLink");
+                Log.e(LOG_TAG, "donw is " + donw);
 
-                String serial = industryIdentifiers.getString("identifier");
-
-                String saleability = saleInfo.getString("saleability");
-
+                String serial = currentID.getString("identifier");
+                Log.e(LOG_TAG, serial);
+                try{
+                    String saleability = saleInfo.getString("saleability");
+                    Log.e(LOG_TAG, saleability);
+                }catch (JSONException e){
+                    Log.e(LOG_TAG, "could not get price");
+                }
+                String saleability = " ";
                 String title = volumeInfo.getString("title");
-
+                Log.e(LOG_TAG, title);
 
                 BookPrase.add(new BookConstructor(title,author, serial, saleability,donw ));
             }

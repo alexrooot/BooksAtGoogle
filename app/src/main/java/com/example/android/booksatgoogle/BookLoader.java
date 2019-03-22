@@ -20,17 +20,20 @@ public class BookLoader extends AsyncTaskLoader {
     @Override
     public Object loadInBackground() {
         ArrayList<BookConstructor> testadapter = new ArrayList<>();
-        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
-                "25.99","00002","http://www.google.com"));
-        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
-                "25.99","00002","http://www.google.com"));
-        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
-                "25.99","00002","http://www.google.com"));
-        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
-                "25.99","00002","http://www.google.com"));
-        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
-                "25.99","00002","http://www.google.com"));
+        /*
 
+
+        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
+                "25.99","00002","http://www.google.com"));
+        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
+                "25.99","00002","http://www.google.com"));
+        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
+                "25.99","00002","http://www.google.com"));
+        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
+                "25.99","00002","http://www.google.com"));
+        testadapter.add(new BookConstructor("funny poem book","Alejandro Ferreyra",
+                "25.99","00002","http://www.google.com"));
+        */
         ArrayList<BookConstructor> results = (ArrayList<BookConstructor>) Utils.findBookData(mainUrl);
         Log.e(LOG_TAG, "we are casting results");
         return results;

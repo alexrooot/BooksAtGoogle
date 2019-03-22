@@ -1,7 +1,12 @@
 package com.example.android.booksatgoogle;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +64,7 @@ public class Utils {
             Log.e(LOG_TAG, "save the string data into JSON=jsonResult");
             JSONArray booksArray = jsonResults.getJSONArray("items");//indicate where to start search
             Log.e(LOG_TAG, "created an array specific for JSON");
+            Log.e(LOG_TAG, "ARRAY HAD THIS MANY BOOKS" + booksArray.length());
             //loop to all things under items JSON
             for (int i = 0; i < booksArray.length(); i++) { Log.e(LOG_TAG,"start loop currently on"+i);
                 JSONObject currentBook = booksArray.getJSONObject(i);// make a temp JSONArray of our data;
@@ -69,32 +75,61 @@ public class Utils {
 
                         JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");//
                         Log.e(LOG_TAG,"Volumeinfo");
+                JSONObject currentID = null;
+                try {
+                 JSONArray   identifier = volumeInfo.getJSONArray("industryIdentifiers");
+                    currentID = identifier.getJSONObject(i);
+                    Log.e(LOG_TAG,"Identifier object");
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "There are no Identifier");
+                }
 
-                JSONArray identifier = volumeInfo.getJSONArray("industryIdentifiers");
-
-                JSONObject currentID = identifier.getJSONObject(i);
                                 //JSONObject industryIdentifiers = currentBook.getJSONObject("industryIdentifiers");
-                                Log.e(LOG_TAG,"indentifer");
-
-
-
+                               // Log.e(LOG_TAG,"indentifer");
+                String title = "";
                 String author = "";
-                String donw = volumeInfo.getString("previewLink");
-                Log.e(LOG_TAG, "donw is " + donw);
+                String serial = "";
+                String saleability = "";
+                String down = "";
+                try {
+                    title = volumeInfo.getString("title");
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG,"Error with title");
+                }
+                try {
+                    JSONArray authorsofbook = (JSONArray) volumeInfo.getJSONArray("authors");
+                    //author = volumeInfo.getString("authors");
+                    author = authorsofbook.optString(0);
+                    Log.e(LOG_TAG, String.valueOf(authorsofbook.length()));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Error Author");
+                }
 
-                String serial = currentID.getString("identifier");
-                Log.e(LOG_TAG, serial);
+                //TODO add if statement and add a boolean value to check agaist.
+                try {
+                    serial = currentID.getString("identifier");
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Error at serial");
+                }
+
                 try{
-                    String saleability = saleInfo.getString("saleability");
+                    saleability = saleInfo.getString("saleability");
                     Log.e(LOG_TAG, saleability);
                 }catch (JSONException e){
                     Log.e(LOG_TAG, "could not get price");
                 }
-                String saleability = " ";
-                String title = volumeInfo.getString("title");
-                Log.e(LOG_TAG, title);
 
-                BookPrase.add(new BookConstructor(title,author, serial, saleability,donw ));
+                try {
+                    down = volumeInfo.getString("previewLink");
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Error at down");
+                }
+
+
+
+
+
+                BookPrase.add(new BookConstructor(title,author, serial, saleability,down ));
             }
 
         } catch (JSONException e) {

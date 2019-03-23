@@ -75,10 +75,13 @@ public class Utils {
 
                         JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");//
                         Log.e(LOG_TAG,"Volumeinfo");
-                JSONObject currentID = null;
+                JSONObject readBookJson = null;
+                        JSONObject currentID = null;
+                boolean ifIdentifier = false;
                 try {
                  JSONArray   identifier = volumeInfo.getJSONArray("industryIdentifiers");
                     currentID = identifier.getJSONObject(i);
+                    ifIdentifier = true;
                     Log.e(LOG_TAG,"Identifier object");
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "There are no Identifier");
@@ -91,6 +94,7 @@ public class Utils {
                 String serial = "";
                 String saleability = "";
                 String down = "";
+                String readBook = "";
                 try {
                     title = volumeInfo.getString("title");
                 } catch (JSONException e) {
@@ -104,13 +108,23 @@ public class Utils {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error Author");
                 }
-
-                //TODO add if statement and add a boolean value to check agaist.
+                /*  Not used there is another element doing this already
                 try {
-                    serial = currentID.getString("identifier");
+                    readBookJson = volumeInfo.getJSONObject("epub");
+                    readBook = readBookJson.getString("downloadLink");
                 } catch (JSONException e) {
-                    Log.e(LOG_TAG, "Error at serial");
+                    Log.e(LOG_TAG, "Error Getting read page");
                 }
+                */
+                //TODO add if statement and add a boolean value to check agaist.
+                if (ifIdentifier) {
+                    try {
+                        serial = currentID.getString("identifier");
+                    } catch (JSONException e) {
+                        Log.e(LOG_TAG, "Error at serial");
+                    }
+                }
+
 
                 try{
                     saleability = saleInfo.getString("saleability");
@@ -129,7 +143,7 @@ public class Utils {
 
 
 
-                BookPrase.add(new BookConstructor(title,author, serial, saleability,down ));
+                BookPrase.add(new BookConstructor(title,author, saleability, serial,down ));
             }
 
         } catch (JSONException e) {

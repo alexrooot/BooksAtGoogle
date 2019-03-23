@@ -9,13 +9,14 @@ import android.widget.EditText;
 import android.content.Loader;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<BookConstructor>>{
-
+    private List<BookConstructor> mdata ;
     public static String LOG_TAG = MainActivity.class.getSimpleName();
     public static String searchWorkd ="";
            // "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
@@ -72,26 +73,51 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public Loader<List<BookConstructor>> onCreateLoader(int id, Bundle args) {
         Log.e(LOG_TAG,"Loader manger started calling on BookLoader");
-        String sample =
-                "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
+       // String sample =
+         //       "https://www.googleapis.com/books/v1/volumes?q=airforce&filter=free-ebooks&libraryRestrict=no-restrict&maxResults=10&orderBy=relevance";
 
 
-        return new BookLoader(this, sample);
+        return new BookLoader(this, searchWorkd);
     }
 
     @Override
     public void onLoadFinished(Loader<List<BookConstructor>> loader, List<BookConstructor> data) {
+        Log.e(LOG_TAG,"We send data out of tread");
+        UI(data);
+
+
+   }
+
+
+
+    @Override
+    public void onLoaderReset(Loader<List<BookConstructor>> loader) {
+    //mdata.clear(); Log.e(LOG_TAG,"We have reset the loader and mdata");
+    }
+    public void UI(List<BookConstructor> resutls) {
+        Log.e(LOG_TAG, "We are in UI method");
         ListView listView = (ListView) findViewById(R.id.list);
-        BookAdapter bookAdapter = new BookAdapter(this,data);
+        Log.e(LOG_TAG, "Get Adapter");
+        BookAdapter clearAdappter = (BookAdapter) listView.getAdapter();
+
+        try {Log.e(LOG_TAG,"We are going to try and see adapter old data");
+            //int listisold = clearAdappter.getCount();
+           // Log.e(LOG_TAG, "we got old list with #: " + getString(listisold));
+            clearAdappter.clearData();
+            //clearAdappter.getCount();
+            Log.e(LOG_TAG, "notify changes");
+            clearAdappter.notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "could not clear");
+        }
+
+
+
+        BookAdapter bookAdapter = new BookAdapter(this,resutls);
         Log.e(LOG_TAG, "generated an adapter instance with data list");
         listView.setAdapter(bookAdapter);
         Log.e(LOG_TAG,"Started the adapter to show onto list view");
         ProgressBar doneProgress = (ProgressBar) findViewById(R.id.loading_spinner);
         doneProgress.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<BookConstructor>> loader) {
-
     }
 }
